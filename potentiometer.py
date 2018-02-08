@@ -14,8 +14,8 @@ class Potentiometer:
         GPIO.setup(self.INCPIN, GPIO.OUT)
         GPIO.setup(self.UPDOWNPIN, GPIO.OUT)
 
-        for i in range (self.steps):
-            self.DecreaseR()
+        for i in range (100):
+            self.IncreaseR()
 
     def DecreaseR(self):
         GPIO.output(self.UPDOWNPIN, GPIO.LOW)
@@ -35,8 +35,9 @@ class Potentiometer:
 if __name__=="__main__":
 
     X3C10=Potentiometer()
-    for i in range(X3C10.steps):
-        print(X3C10.resistance)
-        time.sleep(1)
-        X3C10.IncreaseR()   
+
+#    for i in range(10):#X3C10.steps):
+#        time.sleep(1)
+#        X3C10.IncreaseR()   
+#
     X3C10.Cleanall()

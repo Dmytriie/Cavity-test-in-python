@@ -65,6 +65,31 @@ class Qfactortools:
         beta =  self.get_Qunload() / self.get_Qext()
         return beta
 
+    def merge_qvalues(self, Qu, Ql, Qext, beta, resist):
+        Qu=np.array(Qu)
+        Ql=np.array(Ql)
+        Qext=np.array(Qext)
+        beta=np.array(beta)
+        resist=np.array(resist)
+
+        resist = np.reshape(resist, (len(resist), 1))
+
+        Qu = np.reshape(Qu, (len(Qu), 1))
+        mergedQ = np.append(resist, Qu, axis=1)
+
+        Ql = np.reshape(Ql, (len(Ql), 1))
+        mergedQ = np.append(mergedQ, Ql, axis=1)
+
+        Qext = np.reshape(Qext, (len(Qext), 1))
+        mergedQ = np.append(mergedQ, Qext, axis=1)
+
+        beta = np.reshape(beta, (len(beta), 1))
+        mergedQ = np.append(mergedQ, beta, axis=1)
+        
+        print (len(resist), len(Qu), len(Qu), len(Qu), len(Qu), len(Qu))
+        
+        np.savetxt("datafiles/Qmerged.txt",mergedQ)
+        
     def makeplot(self, xvalues, yvalues):
         #build plots. Take arrays as arguments and later use numpy arrays
         #print("Plot,lol")

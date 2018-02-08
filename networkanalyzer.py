@@ -73,3 +73,4 @@ class NetworkAnalyser:
     def SavetoFile(self, filename, data_array): 
 
         np.savetxt(filename, data_array)
+        

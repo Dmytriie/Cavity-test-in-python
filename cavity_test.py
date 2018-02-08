@@ -8,29 +8,32 @@ from potentiometer import *
 from qfactortools import *
 
 if __name__ == "__main__":
-    qloadvalues=[]
-    qunloadvalues=[]
-    qextvalues=[]
-    resistances=[]
-
+    ql=[]
+    qun=[]
+    qext=[]
+    resist=[]
+    beta=[]
+    
     VNA=NetworkAnalyser()
     VNA.SetParam()
     VNA.Connect()
-    #    print(VNA.GetData())
-    
     DP=Potentiometer()
     DP.steps=100
-    for i in range (DP.steps):
-        filename = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")+"_R_"+str(DP.resistance)+"Ohm"
+
+    for i in range (100):
+        filename = "datafiles/"+datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")+"_R_"+str(DP.resistance)+"_Ohm"
         VNA.SavetoFile(filename,VNA.GetData())
+        print("I saved file number ", i)
         Qtools=Qfactortools(filename)
 
-        qunloadvalues.append(Qtools.get_Qunload())
-        qloadvalues.append(Qtools.get_Qload())
-        qextvalues.append(Qtools.get_Qext())
-        resistances.append(DP.resistance)
+        qun.append(Qtools.get_Qunload())
+        ql.append(Qtools.get_Qload())
+        qext.append(Qtools.get_Qext())
+        resist.append(DP.resistance)
+        beta.append(Qtools.get_beta())
         DP.IncreaseR()
 
     DP.Cleanall()
-#    
-    Qtools.makeplot(resistances,qunloadvalues)
+    
+    #Qtools.makeplot(resist,qun)
+    Qtools.merge_qvalues(qun, ql, qext, beta, resist)
