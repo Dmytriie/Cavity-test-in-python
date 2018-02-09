@@ -12,7 +12,7 @@ class Qfactortools:
         self.idx_res = np.argmin(np.abs(self.cplx))
         self.idx_max = np.argmin(np.abs(self.cplx)) + 100
         self.idx_min = np.argmin(np.abs(self.cplx)) - 100
-        
+
         # determine the rotation angle from the offset for detuned short location
         self.rotation = (np.angle(self.cplx[self.idx_min]) + np.angle(self.cplx[self.idx_max])) / 2
 
@@ -33,7 +33,7 @@ class Qfactortools:
     def get_fres(self):
         f_res = self.freqs[self.idx_res]
         return f_res
-    
+
     def get_Qunload(self):
 
         # find the index of the point where Re(Z) = |Im(Z)| left of the resonance and call it f5
@@ -70,7 +70,7 @@ class Qfactortools:
 
         for i in range (len(args)):
             qvalues.append(args[i])
-        
+
         qvalues[0] = np.reshape(qvalues[0], (len( qvalues[0]), 1))
 
 #        for i in range (3):
@@ -79,7 +79,7 @@ class Qfactortools:
 
         qvalues[1]=np.reshape(qvalues[1],(len(qvalues[1]),1))
         mergedQ = np.append( qvalues[0],  qvalues[1], axis=1)
-       
+
         qvalues[2] = np.reshape(qvalues[2], (len(qvalues[2]), 1))
         mergedQ = np.append(mergedQ, qvalues[2], axis=1)
 
@@ -93,10 +93,10 @@ class Qfactortools:
         mergedQ = np.append(mergedQ, qvalues[5], axis=1)
 
 #        print (len(resist), len(Qu), len(Qu), len(Qu), len(Qu), len(Qu))
-        
+
         np.savetxt("datafiles/Qmerged.txt",mergedQ)
-        
-    def makeplot(self, xvalues, yvalues):
+
+    def make_plot(self, xvalues, yvalues):
         #build plots. Take arrays as arguments and later use numpy arrays
         #print("Plot,lol")
         xvalues = np.array(xvalues)
@@ -109,28 +109,27 @@ class Qfactortools:
         plt.title('A tale of 2 subplots')
         plt.xlabel('time (s)')
         plt.ylabel('Damped oscillation')
-#Uncomment this if you want to build two plots on the same layout. 
+#Uncomment this if you want to build two plots on the same layout.
 #Also uncomment and add to method additional arguments
 #        plt.subplot(2, 1, 2)
 #        plt.plot(xvalues1, yvalues1, '.-')
 #        plt.ylabel('Undamped')
 #
         plt.show()
-        
-        
+
+
 if __name__=="__main__":
-    
+
     Qtools=Qfactortools("datafiles/2018-02-08_18-00-10_R_6030.0Ohm")
     print(Qtools.get_fres())
-    
+
     Qu=Qtools.get_Qunload()
     print ("Qu: ", Qu, "Delta F_u: ", Qtools.delta_f_u)
-     
+
     Ql=Qtools.get_Qload()
     print ("Ql: ", Ql, "Delta F_l: ", Qtools.delta_f_l)
-    
+
     print("Qext: ",Qtools.get_Qext())
     print("Beta: ",Qtools.get_beta())
 
-    Qtools.makeplot(Qu,Ql)
-    
+    Qtools.make_plot(Qu,Ql)

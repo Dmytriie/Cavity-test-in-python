@@ -5,46 +5,46 @@ import smtplib
 
 class Potentiometer:
     def __init__(self,resistance):
-        self.INCPIN=5  
-        self.UPDOWNPIN=3
+        self.inc_pin=5
+        self.up_down_pin=3
         self.steps=100
         self.resistance=resistance
         GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(self.INCPIN, GPIO.OUT)
-        GPIO.setup(self.UPDOWNPIN, GPIO.OUT)
+        GPIO.setup(self.inc_pin, GPIO.OUT)
+        GPIO.setup(self.up_down_pin, GPIO.OUT)
 
         for i in range (self.steps):
-            self.DecreaseR()
+            self.decrease_r()
 
         self.resistance=30
-        
-    def DecreaseR(self):
-        GPIO.output(self.UPDOWNPIN, GPIO.LOW)
-        GPIO.output(self.INCPIN, GPIO.LOW)
-        GPIO.output(self.INCPIN, GPIO.HIGH)
+
+    def decrease_r(self):
+        GPIO.output(self.up_down_pin, GPIO.LOW)
+        GPIO.output(self.inc_pin, GPIO.LOW)
+        GPIO.output(self.inc_pin, GPIO.HIGH)
         self.resistance-=91
 
-    def IncreaseR(self):
-        GPIO.output(self.UPDOWNPIN, GPIO.HIGH)
-        GPIO.output(self.INCPIN, GPIO.LOW)
-        GPIO.output(self.INCPIN, GPIO.HIGH)
+    def increase_r(self):
+        GPIO.output(self.up_down_pin, GPIO.HIGH)
+        GPIO.output(self.inc_pin, GPIO.LOW)
+        GPIO.output(self.inc_pin, GPIO.HIGH)
         self.resistance+=91
 
-    def Cleanall(self):
+    def clean_all(self):
         GPIO.cleanup()
 
 if __name__=="__main__":
 
-    DP=Potentiometer(10000)
-        
+    DP=Poteclean_allntiometer(10000)
+
     while(1):
 
-        
+
         a=input("u/d: ")
         if a=='u':
-            DP.IncreaseR()
+            DP.increase_r()
         if a=='d':
-            DP.DecreaseR()
+            DP.decrease_r()
         if a=='e':
-            DP.Cleanall()
+            DP.clean_all()
             break
