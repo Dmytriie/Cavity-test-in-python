@@ -4,19 +4,20 @@ import time
 import smtplib
 
 class Potentiometer:
-    def __init__(self):
+    def __init__(self,resistance):
         self.INCPIN=5  
         self.UPDOWNPIN=3
-        self.MaxR=10000
-        self.resistance=10030
         self.steps=100
+        self.resistance=resistance
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.INCPIN, GPIO.OUT)
         GPIO.setup(self.UPDOWNPIN, GPIO.OUT)
 
-        for i in range (100):
-            self.IncreaseR()
+        for i in range (self.steps):
+            self.DecreaseR()
 
+        self.resistance=30
+        
     def DecreaseR(self):
         GPIO.output(self.UPDOWNPIN, GPIO.LOW)
         GPIO.output(self.INCPIN, GPIO.LOW)
@@ -34,10 +35,16 @@ class Potentiometer:
 
 if __name__=="__main__":
 
-    X3C10=Potentiometer()
+    DP=Potentiometer(10000)
+        
+    while(1):
 
-#    for i in range(10):#X3C10.steps):
-#        time.sleep(1)
-#        X3C10.IncreaseR()   
-#
-    X3C10.Cleanall()
+        
+        a=input("u/d: ")
+        if a=='u':
+            DP.IncreaseR()
+        if a=='d':
+            DP.DecreaseR()
+        if a=='e':
+            DP.Cleanall()
+            break

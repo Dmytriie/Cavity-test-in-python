@@ -20,7 +20,7 @@ class NetworkAnalyser:
         
     def SetParam(self): #Setting parameters of Network Analyzer instead of pressing buttons
         self.center = 407.0 # MHz
-        self.span = 1000.0 # kHz
+        self.span = 2000.0 # kHz
         self.NumberOfPoints = 4001
         self.bandwidth = 1.0 # kHz
         self.power = 0.0 #  dBm
@@ -65,7 +65,7 @@ class NetworkAnalyser:
         data = (''.join(map(str, data))) #create string from char array
         data_array = np.fromstring(data, sep=',')
         data_array = np.reshape(data_array, (int(len(data_array)/2),2))
-        freqs= np.linspace(start = self.center - self.span / 2, stop = self.center + self.span / 2, num = self.NumberOfPoints)
+        freqs= np.linspace(start = self.center - self.span / 2000, stop = self.center + self.span / 2000, num = self.NumberOfPoints)
         freqs = np.reshape(freqs, (self.NumberOfPoints, 1))
         data_array = np.append(freqs, data_array, axis=1)
         return data_array

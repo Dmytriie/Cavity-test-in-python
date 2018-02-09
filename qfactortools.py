@@ -65,28 +65,34 @@ class Qfactortools:
         beta =  self.get_Qunload() / self.get_Qext()
         return beta
 
-    def merge_qvalues(self, Qu, Ql, Qext, beta, resist):
-        Qu=np.array(Qu)
-        Ql=np.array(Ql)
-        Qext=np.array(Qext)
-        beta=np.array(beta)
-        resist=np.array(resist)
+    def merge_qvalues(self, *args):
+        qvalues=[]
 
-        resist = np.reshape(resist, (len(resist), 1))
-
-        Qu = np.reshape(Qu, (len(Qu), 1))
-        mergedQ = np.append(resist, Qu, axis=1)
-
-        Ql = np.reshape(Ql, (len(Ql), 1))
-        mergedQ = np.append(mergedQ, Ql, axis=1)
-
-        Qext = np.reshape(Qext, (len(Qext), 1))
-        mergedQ = np.append(mergedQ, Qext, axis=1)
-
-        beta = np.reshape(beta, (len(beta), 1))
-        mergedQ = np.append(mergedQ, beta, axis=1)
+        for i in range (len(args)):
+            qvalues.append(args[i])
         
-        print (len(resist), len(Qu), len(Qu), len(Qu), len(Qu), len(Qu))
+        qvalues[0] = np.reshape(qvalues[0], (len( qvalues[0]), 1))
+
+#        for i in range (3):
+#            qvalues[i+1] = np.reshape( qvalues[i+1], (len( qvalues[i+1]), 1))
+#            mergedQ = np.append( qvalues[i],  qvalues[i+1], axis=1)
+
+        qvalues[1]=np.reshape(qvalues[1],(len(qvalues[1]),1))
+        mergedQ = np.append( qvalues[0],  qvalues[1], axis=1)
+       
+        qvalues[2] = np.reshape(qvalues[2], (len(qvalues[2]), 1))
+        mergedQ = np.append(mergedQ, qvalues[2], axis=1)
+
+        qvalues[3] = np.reshape(qvalues[3], (len(qvalues[3]), 1))
+        mergedQ = np.append(mergedQ, qvalues[3], axis=1)
+
+        qvalues[4] = np.reshape(qvalues[4], (len(qvalues[4]), 1))
+        mergedQ = np.append(mergedQ, qvalues[4], axis=1)
+
+        qvalues[5] = np.reshape(qvalues[5], (len(qvalues[5]), 1))
+        mergedQ = np.append(mergedQ, qvalues[5], axis=1)
+
+#        print (len(resist), len(Qu), len(Qu), len(Qu), len(Qu), len(Qu))
         
         np.savetxt("datafiles/Qmerged.txt",mergedQ)
         
