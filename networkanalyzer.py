@@ -13,7 +13,7 @@ import datetime
 
 class NetworkAnalyser:
 
-    def __init__(self, cal_filename, host, port=5025, BUFF_SIZE=1, center=407, span=1000, n_points=4001, bandwidth=1.0, power=0.0, average=10, measurement="S11" ):#Initialize object. Socket, adress, everything for start work
+    def __init__(self, cal_filename, host, port=5025, BUFF_SIZE=1, center=410, span=20000, n_points=4001, bandwidth=1.0, power=0.0, average=20, measurement="S11" ):#Initialize object. Socket, adress, everything for start work
         self.sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.address=host# VNA adress
         self.portnumber=port
@@ -47,7 +47,7 @@ class NetworkAnalyser:
 
     def get_data(self):#get string from TCP, char array to string, split string and convert to floats. Returns float array of data with frequencies
         data = [] #empty array to put symbols in it
-
+        MHz=1000000
         self.sock.send("*WAI;SYST:ERR:ALL?".encode('ascii'))
         self.sock.send("AVER:CLE\n".encode('ascii')) #clean previous frames \n needed here
         self.sock.send("INIT".encode('ascii')) #initiate new cycle DO NOT ADD \n !!!! Execution error 200 INIT
@@ -64,7 +64,7 @@ class NetworkAnalyser:
         data = (''.join(map(str, data))) #create string from char array
         data_array = np.fromstring(data, sep=',')
         data_array = np.reshape(data_array, (int(len(data_array)/2),2))
-        freqs= np.linspace(start = self.center - self.span / 2000, stop = self.center + self.span / 2000, num = self.n_points)
+        freqs= np.linspace(start = (self.center - self.span / 2 / 1000)*MHz, stop = (self.center + self.span / 2 / 1000)*MHz, num = self.n_points)
         freqs = np.reshape(freqs, (self.n_points, 1))
         data_array = np.append(freqs, data_array, axis=1)
         return data_array
@@ -89,6 +89,6 @@ class NetworkAnalyser:
 
 if __name__ == "__main__":
 
-    myvna=NetworkAnalyser('2018-02-01_P1_600Mhz.cal','192.168.254.2')
+    myvna=NetworkAnalyser('2018-02-12_P1_410_20.cal','192.168.254.2')
     myvna.connect()
-    print("Filename " + myvna.save_to_file(myvna.get_nice_filename(), myvna.get_data(),touchstone=False)  + " was created")
+    print("Filename " + myvna.save_to_file(myvna.get_nice_filename(), myvna.get_data(),touchstone=True)  + " was created")
