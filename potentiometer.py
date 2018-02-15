@@ -4,11 +4,10 @@ import time
 import smtplib
 
 class Potentiometer:
-    def __init__(self,resistance):
-        self.inc_pin=5
-        self.up_down_pin=3
+    def __init__(self):
+        self.inc_pin=3
+        self.up_down_pin=5
         self.steps=100
-        self.resistance=resistance
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.inc_pin, GPIO.OUT)
         GPIO.setup(self.up_down_pin, GPIO.OUT)
@@ -22,29 +21,33 @@ class Potentiometer:
         GPIO.output(self.up_down_pin, GPIO.LOW)
         GPIO.output(self.inc_pin, GPIO.LOW)
         GPIO.output(self.inc_pin, GPIO.HIGH)
-        self.resistance-=91
-
+        
     def increase_r(self):
         GPIO.output(self.up_down_pin, GPIO.HIGH)
         GPIO.output(self.inc_pin, GPIO.LOW)
         GPIO.output(self.inc_pin, GPIO.HIGH)
-        self.resistance+=91
+
+    def max_r(self):
+        for i in range (self.steps):
+            self.increase_r()
 
     def clean_all(self):
         GPIO.cleanup()
 
 if __name__=="__main__":
 
-    DP=Poteclean_allntiometer(10000)
+    DP=Potentiometer()
 
     while(1):
 
+        a=input("u - increase resistance; d - decrease resistance; m - maximum resistance; e - end this program and exit. Choose your destiny: ")
 
-        a=input("u/d: ")
         if a=='u':
             DP.increase_r()
         if a=='d':
             DP.decrease_r()
+        if a=='m':
+            DP.max_r()
         if a=='e':
             DP.clean_all()
             break

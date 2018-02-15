@@ -1,10 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
 
 class Qfactortools:
     def __init__(self, filename):
 
-        self.data=np.genfromtxt(filename)
+        self.data=np.genfromtxt(filename, skip_header=5)
         self.freqs=self.data[:,0]
         self.cplx = np.vectorize(complex)(self.data[:, 1],self.data[:, 2])
 
@@ -119,17 +120,27 @@ class Qfactortools:
 
 
 if __name__=="__main__":
+    
+    ql=[]
+    qun=[]
+    qext=[]
+    resist=[]
+    beta=[]
+    fres=[]
+    i=0
+    res_step=500
+    files=sys.argv
 
-    Qtools=Qfactortools("datafiles/2018-02-08_18-00-10_R_6030.0Ohm")
-    print(Qtools.get_fres())
+    for i in range(len(files)-1):
+        Qtools=Qfactortools(files[i+1])
+        fres.append(Qtools.get_fres())
+        qun.append(Qtools.get_Qunload())
+        ql.append(Qtools.get_Qload())
+        qext.append(Qtools.get_Qext())
+        resist.append(i*res_step)
+        beta.append(Qtools.get_beta())
+    
+    
+    Qtools.merge_qvalues(resist, fres, qun, ql, qext, beta)
 
-    Qu=Qtools.get_Qunload()
-    print ("Qu: ", Qu, "Delta F_u: ", Qtools.delta_f_u)
-
-    Ql=Qtools.get_Qload()
-    print ("Ql: ", Ql, "Delta F_l: ", Qtools.delta_f_l)
-
-    print("Qext: ",Qtools.get_Qext())
-    print("Beta: ",Qtools.get_beta())
-
-    Qtools.make_plot(Qu,Ql)
+    #Qtools.make_plot( add arguments here)
